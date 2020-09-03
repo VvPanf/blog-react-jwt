@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import UserService from "../services/user-service";
 import PostsService from "../services/posts-service";
+import {Link} from "react-router-dom";
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -60,13 +61,20 @@ export default class BoardUser extends Component {
           <img src={post.image}
                 className="mr-3" alt="..." height="64px" width="64px"/>
             <div className="media-body">
-            <h5 className="mt-0 mb-1 font-weight-bold">{post.tag} - {post.author.username}</h5>
+            <h5 className="mt-0 mb-1 font-weight-bold">{post.tag} - {post.authorName}</h5>
               {post.text}
+            </div>
+            <div>
+              <Link to={"/edit/"+post.id}>edit</Link>{" "}
+              <href>delete</href>
             </div>
           </li>
         ))
         }
       </ul>
+      <div className="text-center">
+        <Link to={"/create"} className="btn btn-primary">Create post</Link>
+      </div>
       </div>
     );
   }

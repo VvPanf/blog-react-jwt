@@ -1,6 +1,6 @@
 package blog.controller;
 
-import blog.model.Post;
+import blog.service.PostDetails;
 import blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,31 +19,36 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Post>> getAll() {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<PostDetails>> getAll() {
         return new ResponseEntity<>(postService.allPosts(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Post> getById(@PathVariable Long id) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<PostDetails> getById(@PathVariable Long id) {
         return new ResponseEntity<>(postService.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/tag/{tag}")
-    public ResponseEntity<List<Post>> getByTag(@PathVariable String tag) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<PostDetails>> getByTag(@PathVariable String tag) {
         return new ResponseEntity<>(postService.getByTag(tag), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Post> save(@RequestBody Post post) {
+    public ResponseEntity<PostDetails> save(@RequestBody PostDetails post) {
         return new ResponseEntity<>(postService.save(post), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Post> update(@RequestBody Post post) {
+    public ResponseEntity<PostDetails> update(@RequestBody PostDetails post) {
         return new ResponseEntity<>(postService.save(post), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
         return new ResponseEntity<>(postService.delete(id), HttpStatus.OK);

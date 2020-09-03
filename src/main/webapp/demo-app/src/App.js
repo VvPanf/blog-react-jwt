@@ -12,6 +12,7 @@ import Profile from "./components/profile";
 import BoardUser from "./components/board-user";
 import BoardModerator from "./components/board-moderator";
 import BoardAdmin from "./components/board-admin";
+import PostPage from "./components/post-page";
 
 class App extends Component {
   constructor(props) {
@@ -122,6 +123,8 @@ class App extends Component {
               <Route path="/user" component={BoardUser} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
+              <Route path="/create" component={PostPage}/>
+              <Route path="/edit/:id" component={PostPage}/>
             </Switch>
           </div>
         </div>
