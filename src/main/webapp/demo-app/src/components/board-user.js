@@ -33,6 +33,9 @@ export default class BoardUser extends Component {
       }
     );
     this.findPosts();
+    this.setState({
+      user: JSON.parse(sessionStorage.getItem("user"))
+    });
   }
 
   findPosts = () => {
@@ -41,6 +44,16 @@ export default class BoardUser extends Component {
       .then((data) => {
           this.setState({posts: data});
       });
+  }
+
+  deletePost = (postId) => {
+      PostsService.deletePost(postId)
+        .then(responce => {
+          if(responce.data != null)
+            this.setState({
+              posts: this.state.posts.filter(post => post.id !== postId)
+            });
+        });
   }
 
   render() {
@@ -56,18 +69,25 @@ export default class BoardUser extends Component {
             </header>
           </div>
         :
-        this.state.posts.map((post) => (
+        this.state.posts.map((post) => (    
           <li className="media mt-5" key={post.id}>
-          <img src={post.image}
-                className="mr-3" alt="..." height="64px" width="64px"/>
-            <div className="media-body">
-            <h5 className="mt-0 mb-1 font-weight-bold">{post.tag} - {post.authorName}</h5>
-              {post.text}
-            </div>
-            <div>
-              <Link to={"/edit/"+post.id}>edit</Link>{" "}
-              <href>delete</href>
-            </div>
+            <form>
+            <img src={post.image}
+                  className="mr-3" alt="..." height="64px" width="64px"/>
+              <div className="media-body">
+              <h5 className="mt-0 mb-1 font-weight-bold">{post.tag} - {post.authorName}</h5>
+                {post.text}
+              </div>
+              {this.state.user.roles.indexOf("ROLE_MODERATOR") != -1 || this.state.user.username == post.authorName ?
+                <div>
+                    
+                      <Link className="btn btn-link" to={"/edit/"+post.id}>edit</Link>{" "}
+                      <button type="button" className="btn btn-link" onClick={this.deletePost.bind(this, post.id)}>delete</button>
+                </div>
+                :
+                <></>
+              }
+            </form>
           </li>
         ))
         }
